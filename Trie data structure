@@ -1,0 +1,177 @@
+/*
+ It is written in  c++.only two operation is functional adding nod to the trie and serching  a string in trie
+ 
+*/
+
+
+
+#include<iostream>
+#include<string>
+using namespace std;
+#define size 26
+class TriNode
+{
+public:
+    char c;
+    int end;
+    TriNode* character[size];
+    TriNode()
+    {
+        c='\0';
+        end=0;
+        for(int i=0;i<size;i++)
+        character[i]=0;
+    }
+
+
+};
+class Tri
+{
+public:
+    TriNode* root;
+    Tri()
+    {
+        root=0;
+    }
+    void add_data(string);
+    //void print();
+    void search(string);
+
+};
+void Tri::add_data(string s)
+{
+    int leng=s.length();
+      TriNode* temp=root;
+    if(root==0)
+    {
+
+        for(int i=0;i<leng;i++)
+        {
+            TriNode* p=new TriNode();
+            p->c=s[i];
+            if(i==0)
+            {
+                root=p;
+                temp=p;
+            } else
+            {
+                int t=s[i]-'a';
+                temp->character[t]=p;
+                temp=p;
+            }
+            if(i==leng-1)
+            {
+                p->end=1;
+            }
+
+
+        }
+    } else
+    {
+        int j=0;
+        while(j<leng)
+        {
+            if(temp->c==s[j])
+            {
+                j++;
+            } else
+            {
+                int t1=s[j]-'a';
+                TriNode* ptr=new TriNode();
+                ptr->c=s[j];
+                temp->character[t1]=ptr;
+                if(j==leng-1)
+                {
+                    ptr->end=1;
+                } else
+                {
+                    temp=ptr;
+                }
+                j++;
+            }
+        }
+
+    }
+}
+
+void Tri::search(string s)
+{
+    int j=0;
+    TriNode* temp=root;
+    while( temp!=0)
+    {
+        int t;
+        if(temp->c==s[j])
+           {
+               t=s[j+1]-'a';
+
+
+               if(j+1!=s.length()-1)
+               {
+
+                temp=temp->character[t];
+                  j++;
+               } else
+               {
+
+                 temp=temp->character[t];
+                 break;
+               }
+           }
+           else
+        {
+            t=s[j]-'a';
+
+            temp=temp->character[t];
+        }
+
+    }
+    if(temp==0)
+        {
+
+            cout<<s<<" not found in TRI\n";
+        }
+    else
+    {
+        if(temp->end==1)
+            cout<<s<<" found in TRI\n";
+        else
+             cout<<s<<" not found in TRI\n";
+    }
+
+}
+
+
+
+
+
+int main()
+{
+    Tri t;
+    string s;
+
+    int m=1;
+    while(m!=3)
+    {
+        cout<<"Enter integer 1,2 or 3\n1.add_data()\n2.search()\n3.exit\n";
+        cin>>m;
+        if(m==1)
+        {
+            cout<<"Enter the string:";
+            cin>>s;
+            t.add_data(s);
+
+        } else
+        if(m==2)
+        {
+            cout<<"Enter the string:";
+           cin>>s;
+            t.search(s);
+        }
+
+
+    }
+
+    return 0;
+}
+
